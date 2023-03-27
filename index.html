@@ -1,1 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voltio default</title>
+  <style>
+    body {
+      font-size: 2em;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .item {
+      display: block;
+      padding: 1em 0 1em 1em;
+      background-color: #f8f8f8;
+    }
+
+    input[type="checkbox"] {
+      display: none;
+    }
+
+    input[type="checkbox"]:checked + .item {
+      background-color: #d9f8cf;
+      font-weight: bold;
+      color: #309111;
+    }
+    .title {
+      padding: .5em 0;
+      text-align: center;
+      margin: 0;
+      font-size: 1em;
+      font-weight: bold;
+      background-color: #333;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+
+    <div class="title">Voltio {{ date() }}</div>
+
+    <div v-for="(value, key) in locations" :key="key">
+      <input type="checkbox" :id="`check-${key}`" v-model="locations[key]" @click="save">
+      <label :for="`check-${key}`" class="item">{{ key }}</label>
+    </div> 
+
+  </div>
+
+  </div>
+
+  <script src="https://unpkg.com/vue@2.5.17/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data() {
+        return {
+          locations: {
+            'ECI': false,
+            'Cex': false,
+            'Game': false,
+            'Tiger': false,
+            'Ale-Hop': false,
+            'Mirinda': false
+          }
+        }
+      },
+      methods: {
+        date() {
+          const d = new Date()
+          return [d.getFullYear(), d.getMonth() + 1, d.getDate()].join('.')
+        },
+        save() {
+          window.requestAnimationFrame(() => localStorage.setItem(`voltio-default-${this.date()}`, JSON.stringify(this.locations)))
+        },
+        load() {
+          if (!localStorage.getItem(`voltio-default-${this.date()}`)) return false
+          this.locations = JSON.parse(localStorage.getItem(`voltio-default-${this.date()}`))
+        }
+      },
+      mounted() {
+        this.load()
+      }
+    })
+  </script>
+</body>
+
+</html>
