@@ -86,7 +86,10 @@
         },
         load() {
           if (!localStorage.getItem(`voltio-default-${this.date()}`)) return false
-          this.locations = JSON.parse(localStorage.getItem(`voltio-default-${this.date()}`))
+          const locations = JSON.parse(localStorage.getItem(`voltio-default-${this.date()}`))
+          for(let loc in locations){
+            this.locations[loc] = locations[loc]
+          }
         }
       },
       mounted() {
